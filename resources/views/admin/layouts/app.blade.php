@@ -6,23 +6,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>
-        @yield('title', 'Admin Panel')
+        @yield('title', 'Weblog Admin')
     </title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="bg-slate-100 text-slate-800">
+
+<body class="bg-[#020617] text-slate-200">
+
 
 <div class="min-h-screen flex">
 
+
     <x-admin.sidebar />
 
-    <div class="flex-1 flex flex-col">
+
+    <div class="flex-1">
+
 
         <x-admin.header />
 
-        <main class="p-6">
+
+        <main class="p-8">
 
             <x-admin.alert />
 
@@ -30,9 +36,12 @@
 
         </main>
 
+
     </div>
 
+
 </div>
+
 
 </body>
 

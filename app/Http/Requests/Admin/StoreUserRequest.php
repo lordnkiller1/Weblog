@@ -3,36 +3,48 @@
 namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class UpdateCategoryRequest extends FormRequest
+class StoreUserRequest extends FormRequest
 {
+
     public function authorize(): bool
     {
         return true;
     }
 
+
+
     public function rules(): array
     {
         return [
+
             'name' => [
                 'required',
                 'string',
                 'max:255',
-                Rule::unique('categories', 'name')
-                    ->ignore($this->route('category')->id),
             ],
 
-            'image' => [
-                'nullable',
-                'image',
-                'max:3000',
-            ],
 
-            'status' => [
+            'email' => [
                 'required',
-                'boolean',
+                'email',
+                'max:255',
+                'unique:users,email',
             ],
+
+
+            'password' => [
+                'required',
+                'string',
+                'min:8',
+            ],
+
+
+            'role' => [
+                'required',
+                'in:admin,author,user',
+            ],
+
         ];
     }
 }
