@@ -20,10 +20,10 @@ return new class extends Migration
             $table->string('title');
             $table->string('slug');
             $table->text('content');
-            $table->file('image');
+            $table->string('image')->nullable();
             $table->string('status');
-            $table->boolean('is_featured');
-            $table->dateTime('published_at');
+            $table->boolean('is_featured')->default(false);
+            $table->timestamp('published_at')->nullable();
             $table->timestamps();
         });
     }
