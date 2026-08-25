@@ -5,15 +5,45 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Admin\StoreUserRequest;
 use App\Http\Requests\Admin\UpdateUserRequest;
 use App\Models\User;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
-class UserController extends Controller
+class UserController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+
+            new Middleware(
+                'permission:users.view',
+                only: ['index', 'show']
+            ),
+
+            new Middleware(
+                'permission:users.create',
+                only: ['create', 'store']
+            ),
+
+            new Middleware(
+                'permission:users.edit',
+                only: ['edit', 'update']
+            ),
+
+            new Middleware(
+                'permission:users.delete',
+                only: ['destroy']
+            ),
+
+        ];
+    }
+
 
     public function index()
     {
-        $users = User::query()
-            ->latest()
+        $users = User::with('roles')
+        ->latest()
             ->paginate(10);
 
 
@@ -24,7 +54,10 @@ class UserController extends Controller
 
     public function create()
     {
-        return view('admin.users.create');
+        $roles = Role::all();
+
+
+        return view('admin.users.create', compact('roles'));
     }
 
 
@@ -34,10 +67,27 @@ class UserController extends Controller
         $data = $request->validated();
 
 
-        $data['password'] = Hash::make($data['password']);
+        if (
+            $data['role'] === 'admin'
+            &&
+            ! auth()->user()->hasRole('admin')
+        ) {
+            abort(403);
+        }
 
 
-        User::create($data);
+        $user = User::create([
+            'name' => $data['name'],
+
+            'email' => $data['email'],
+
+            'password' => Hash::make(
+                $data['password']
+            ),
+        ]);
+
+
+        $user->assignRole($data['role']);
 
 
         return to_route('admin.users.index')
@@ -46,13 +96,16 @@ class UserController extends Controller
 
 
 
-
     public function edit(User $user)
     {
-        return view('admin.users.edit', compact('user'));
+        $roles = Role::all();
+
+
+        return view(
+            'admin.users.edit',
+            compact('user', 'roles')
+        );
     }
-
-
 
 
 
@@ -64,29 +117,70 @@ class UserController extends Controller
         $data = $request->validated();
 
 
-
-        if (!empty($data['password'])) {
-
-            $data['password'] = Hash::make(
-                $data['password']
-            );
-        } else {
-
-            unset($data['password']);
+        if (
+            isset($data['role'])
+            &&
+            $data['role'] !== $user->getRoleNames()->first()
+            &&
+            ! auth()->user()->hasRole('admin')
+        ) {
+            abort(403);
         }
 
 
 
-        $user->update($data);
+        $updateData = [
+            'name' => $data['name'],
+            'email' => $data['email'],
+        ];
+
+
+
+        if (! empty($data['password'])) {
+
+            $updateData['password'] = Hash::make(
+                $data['password']
+            );
+
+        }
+
+
+
+        $user->update($updateData);
+
+
+
+        if (isset($data['role'])) {
+
+            if (
+                $user->hasRole('admin')
+                &&
+                $data['role'] !== 'admin'
+                &&
+                User::role('admin')->count() <= 1
+            ) {
+
+                return back()
+                    ->with(
+                        'error',
+                        'آخرین مدیر سیستم قابل تغییر نیست'
+                    );
+            }
+
+
+            $user->syncRoles([
+                $data['role']
+            ]);
+        }
 
 
 
         return to_route('admin.users.index')
-            ->with('success', 'کاربر با موفقیت بروزرسانی شد');
+            ->with(
+                'success',
+                'کاربر با موفقیت بروزرسانی شد'
+            );
     }
-
-
-
 
 
 
@@ -104,9 +198,9 @@ class UserController extends Controller
 
 
         if (
-            $user->role === 'admin'
+            $user->hasRole('admin')
             &&
-            User::where('role', 'admin')->count() <= 1
+            User::role('admin')->count() <= 1
         ) {
 
             return back()
@@ -122,6 +216,9 @@ class UserController extends Controller
 
 
         return to_route('admin.users.index')
-            ->with('success', 'کاربر حذف شد');
+            ->with(
+                'success',
+                'کاربر حذف شد'
+            );
     }
 }
