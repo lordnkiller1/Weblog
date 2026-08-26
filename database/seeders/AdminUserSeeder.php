@@ -5,58 +5,49 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-use Spatie\Permission\Models\Role;
 
 class AdminUserSeeder extends Seeder
 {
     public function run(): void
     {
-        /*
-        |--------------------------------------------------------------------------
-        | Create Roles
-        |--------------------------------------------------------------------------
-        */
-
-        $adminRole = Role::firstOrCreate([
-            'name' => 'admin',
-        ]);
-
-
-        Role::firstOrCreate([
-            'name' => 'author',
-        ]);
-
-
-        Role::firstOrCreate([
-            'name' => 'user',
-        ]);
-
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Create Admin User
-        |--------------------------------------------------------------------------
-        */
-
-        $admin = User::firstOrCreate(
-            [
-                'email' => 'admin@gmail.com',
-            ],
+        $users = [
             [
                 'name' => 'Admin',
-                'password' => Hash::make('12345678'),
-            ]
-        );
+                'email' => 'admin@gmail.com',
+                'password' => '12345678',
+                'role' => 'admin',
+            ],
+            [
+                'name' => 'Author',
+                'email' => 'author@gmail.com',
+                'password' => '12345678',
+                'role' => 'author',
+            ],
+            [
+                'name' => 'User',
+                'email' => 'user@gmail.com',
+                'password' => '12345678',
+                'role' => 'user',
+            ],
+        ];
 
 
+        foreach ($users as $data) {
 
-        /*
-        |--------------------------------------------------------------------------
-        | Assign Role
-        |--------------------------------------------------------------------------
-        */
+            $user = User::firstOrCreate(
+                [
+                    'email' => $data['email'],
+                ],
+                [
+                    'name' => $data['name'],
+                    'password' => Hash::make($data['password']),
+                ]
+            );
 
-        $admin->assignRole($adminRole);
+
+            $user->syncRoles([
+                $data['role'],
+            ]);
+        }
     }
 }

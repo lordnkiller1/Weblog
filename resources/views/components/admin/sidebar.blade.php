@@ -132,7 +132,7 @@
 
 
         <a
-            href="#"
+            href="{{route('admin.posts.index')}}"
             class="
                 flex items-center gap-3
                 px-4 py-3
@@ -156,7 +156,7 @@
 
 
         <a
-            href="#"
+            href="{{ route('admin.tags.index') }}"
             class="
                 flex items-center gap-3
                 px-4 py-3
