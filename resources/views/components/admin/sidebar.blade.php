@@ -56,8 +56,7 @@
 
 
 
-        <a
-            href="#"
+        <a href="{{ route('admin.dashboard') }}"
             class="
                 flex items-center gap-3
                 px-4 py-3
@@ -66,8 +65,7 @@
 
                 {{ request()->routeIs('admin.dashboard')
                     ? 'bg-violet-500/20 text-violet-400'
-                    : 'text-slate-300 hover:bg-white/5 hover:text-white'
-                }}
+                    : 'text-slate-300 hover:bg-white/5 hover:text-white' }}
             ">
 
             <span>
@@ -85,8 +83,7 @@
         </p>
 
 
-        <a
-            href="{{ route('admin.users.index') }}"
+        <a href="{{ route('admin.users.index') }}"
             class="
                 flex items-center gap-3
                 px-4 py-3
@@ -95,8 +92,7 @@
 
                 {{ request()->routeIs('admin.users.*')
                     ? 'bg-violet-500/20 text-violet-400 shadow-lg shadow-violet-500/10'
-                    : 'text-slate-300 hover:bg-violet-500/10 hover:text-violet-400'
-                }}
+                    : 'text-slate-300 hover:bg-violet-500/10 hover:text-violet-400' }}
             ">
 
             <span>
@@ -107,8 +103,7 @@
 
         </a>
 
-        <a
-            href="{{ route('admin.categories.index') }}"
+        <a href="{{ route('admin.categories.index') }}"
             class="
                 flex items-center gap-3
                 px-4 py-3
@@ -117,8 +112,7 @@
 
                 {{ request()->routeIs('admin.categories.*')
                     ? 'bg-violet-500/20 text-violet-400 shadow-lg shadow-violet-500/10'
-                    : 'text-slate-300 hover:bg-violet-500/10 hover:text-violet-400'
-                }}
+                    : 'text-slate-300 hover:bg-violet-500/10 hover:text-violet-400' }}
             ">
 
             <span>
@@ -131,8 +125,7 @@
 
 
 
-        <a
-            href="{{route('admin.posts.index')}}"
+        <a href="{{ route('admin.posts.index') }}"
             class="
                 flex items-center gap-3
                 px-4 py-3
@@ -141,8 +134,7 @@
 
                 {{ request()->routeIs('admin.posts.*')
                     ? 'bg-violet-500/20 text-violet-400 shadow-lg shadow-violet-500/10'
-                    : 'text-slate-300 hover:bg-violet-500/10 hover:text-violet-400'
-                }}
+                    : 'text-slate-300 hover:bg-violet-500/10 hover:text-violet-400' }}
             ">
 
             <span>
@@ -155,8 +147,7 @@
 
 
 
-        <a
-            href="{{ route('admin.tags.index') }}"
+        <a href="{{ route('admin.tags.index') }}"
             class="
                 flex items-center gap-3
                 px-4 py-3
@@ -165,8 +156,7 @@
 
                 {{ request()->routeIs('admin.tags.*')
                     ? 'bg-violet-500/20 text-violet-400 shadow-lg shadow-violet-500/10'
-                    : 'text-slate-300 hover:bg-violet-500/10 hover:text-violet-400'
-                }}
+                    : 'text-slate-300 hover:bg-violet-500/10 hover:text-violet-400' }}
             ">
 
             <span>

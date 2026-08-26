@@ -38,6 +38,9 @@ class PermissionSeeder extends Seeder
             'tags.edit',
             'tags.delete',
 
+
+            'dashboard.view',
+
         ];
 
 

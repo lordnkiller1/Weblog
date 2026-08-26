@@ -121,8 +121,7 @@
 
                         <td class="p-5">
 
-                            {{ $user->created_at->format('Y/m/d') }}
-
+                            <x-jalali-date :date="$user->created_at"/>
                         </td>
 
 

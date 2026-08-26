@@ -49,7 +49,7 @@ class RoleSeeder extends Seeder
         */
 
         $author->syncPermissions([
-
+            'dashboard.view',
             'posts.view',
             'posts.create',
             'posts.edit',
